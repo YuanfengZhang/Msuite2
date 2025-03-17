@@ -134,29 +134,70 @@ print "<table id=\"alignStat\" width=\"75%\">\n",
 		"<tr bgcolor=\"$color[1]\"><td><b>After preprocessing</b></td>",
 		"<td><b>", digitalize($trim), sprintf(" (%.2f %%)", $trim/$total*100), "</b></td></tr>\n";
 my $realTotal = $aligned+$cntL+$cntP;
+# print "<tr bgcolor=\"$color[0]\"><td><b>Total aligned reads</b></td>",
+# 		"<td><b>", digitalize($realTotal), sprintf(" (%.2f %%)", $realTotal/$trim*100), "</b></td></tr>\n",
+# 		"<tr bgcolor=\"$color[0]\"><td>&nbsp;&nbsp;Lambda reads</td>",
+# 		"<td>&nbsp;&nbsp;", digitalize($cntL), sprintf(" (%.2f %%)", $cntL/$realTotal*100), "</td></tr>\n",
+# 		"<tr bgcolor=\"$color[0]\"><td>&nbsp;&nbsp;pUC19 reads</td>",
+# 		"<td>&nbsp;&nbsp;", digitalize($cntP), sprintf(" (%.2f %%)", $cntP/$realTotal*100), "</td></tr>\n",
+# 		"<tr bgcolor=\"$color[0]\"><td><b>Non-lambda/pUC19 reads</b></td>",
+# 		"<td><b>", digitalize($aligned), sprintf(" (%.2f %%)", $aligned/$realTotal*100), "</b></td></tr>\n",
+# 		"<tr bgcolor=\"$color[1]\"><td>&nbsp;&nbsp;Forward chain</td>",
+# 		"<td>&nbsp;&nbsp;", digitalize($waligned), sprintf(" (%.2f %%)", $waligned/$aligned*100), "</td></tr>\n",
+# 		"<tr bgcolor=\"$color[0]\"><td>&nbsp;&nbsp;Reverse chain</td>",
+# 		"<td>&nbsp;&nbsp;", digitalize($caligned), sprintf(" (%.2f %%)", $caligned/$aligned*100), "</td></tr>\n";
 print "<tr bgcolor=\"$color[0]\"><td><b>Total aligned reads</b></td>",
-		"<td><b>", digitalize($realTotal), sprintf(" (%.2f %%)", $realTotal/$trim*100), "</b></td></tr>\n",
-		"<tr bgcolor=\"$color[0]\"><td>&nbsp;&nbsp;Lambda reads</td>",
-		"<td>&nbsp;&nbsp;", digitalize($cntL), sprintf(" (%.2f %%)", $cntL/$realTotal*100), "</td></tr>\n",
-		"<tr bgcolor=\"$color[0]\"><td>&nbsp;&nbsp;pUC19 reads</td>",
-		"<td>&nbsp;&nbsp;", digitalize($cntP), sprintf(" (%.2f %%)", $cntP/$realTotal*100), "</td></tr>\n",
-		"<tr bgcolor=\"$color[0]\"><td><b>Non-lambda/pUC19 reads</b></td>",
-		"<td><b>", digitalize($aligned), sprintf(" (%.2f %%)", $aligned/$realTotal*100), "</b></td></tr>\n",
-		"<tr bgcolor=\"$color[1]\"><td>&nbsp;&nbsp;Forward chain</td>",
-		"<td>&nbsp;&nbsp;", digitalize($waligned), sprintf(" (%.2f %%)", $waligned/$aligned*100), "</td></tr>\n",
-		"<tr bgcolor=\"$color[0]\"><td>&nbsp;&nbsp;Reverse chain</td>",
-		"<td>&nbsp;&nbsp;", digitalize($caligned), sprintf(" (%.2f %%)", $caligned/$aligned*100), "</td></tr>\n";
+        "<td><b>", digitalize($realTotal), 
+        ($trim != 0 ? sprintf(" (%.2f %%)", $realTotal/$trim*100) : " (N/A)"), 
+        "</b></td></tr>\n",
+        "<tr bgcolor=\"$color[0]\"><td>&nbsp;&nbsp;Lambda reads</td>",
+        "<td>&nbsp;&nbsp;", digitalize($cntL), 
+        ($realTotal != 0 ? sprintf(" (%.2f %%)", $cntL/$realTotal*100) : " (N/A)"), 
+        "</td></tr>\n",
+        "<tr bgcolor=\"$color[0]\"><td>&nbsp;&nbsp;pUC19 reads</td>",
+        "<td>&nbsp;&nbsp;", digitalize($cntP), 
+        ($realTotal != 0 ? sprintf(" (%.2f %%)", $cntP/$realTotal*100) : " (N/A)"), 
+        "</td></tr>\n",
+        "<tr bgcolor=\"$color[0]\"><td><b>Non-lambda/pUC19 reads</b></td>",
+        "<td><b>", digitalize($aligned), 
+        ($realTotal != 0 ? sprintf(" (%.2f %%)", $aligned/$realTotal*100) : " (N/A)"), 
+        "</b></td></tr>\n",
+        "<tr bgcolor=\"$color[1]\"><td>&nbsp;&nbsp;Forward chain</td>",
+        "<td>&nbsp;&nbsp;", digitalize($waligned), 
+        ($aligned != 0 ? sprintf(" (%.2f %%)", $waligned/$aligned*100) : " (N/A)"), 
+        "</td></tr>\n",
+        "<tr bgcolor=\"$color[0]\"><td>&nbsp;&nbsp;Reverse chain</td>",
+        "<td>&nbsp;&nbsp;", digitalize($caligned), 
+        ($aligned != 0 ? sprintf(" (%.2f %%)", $caligned/$aligned*100) : " (N/A)"), 
+        "</td></tr>\n";
 
+# print "<tr bgcolor=\"$color[1]\"><td><b>Low-quality alignments</b></td>",
+# 		"<td><b>", digitalize($discard), sprintf(" (%.2f %%)", $discard/$aligned*100), "</b></td></tr>\n";
+
+# unless( exists $conf{'Keep duplicates'} && $conf{'Keep duplicates'} eq 'Yes' ) {
+# print "<tr bgcolor=\"$color[0]\"><td><b>PCR duplicates</b></td>",
+# 		"<td><b>", digitalize($duplicate), sprintf(" (%.2f %%)", $duplicate/$aligned*100), "</b></td></tr>\n";
+# }
+# print "<tr bgcolor=\"$color[1]\"><td><b>Reported alignments</b></td>",
+# 		"<td><b>", digitalize($reported), sprintf(" (%.2f %%)", $reported/$aligned*100), "</b></td></tr>\n",
+# 	 "</table>\n\n";
 print "<tr bgcolor=\"$color[1]\"><td><b>Low-quality alignments</b></td>",
-		"<td><b>", digitalize($discard), sprintf(" (%.2f %%)", $discard/$aligned*100), "</b></td></tr>\n";
+        "<td><b>", digitalize($discard), 
+        ($aligned != 0 ? sprintf(" (%.2f %%)", $discard/$aligned*100) : " (N/A)"), 
+        "</b></td></tr>\n";
 
-unless( exists $conf{'Keep duplicates'} && $conf{'Keep duplicates'} eq 'Yes' ) {
-print "<tr bgcolor=\"$color[0]\"><td><b>PCR duplicates</b></td>",
-		"<td><b>", digitalize($duplicate), sprintf(" (%.2f %%)", $duplicate/$aligned*100), "</b></td></tr>\n";
+unless (exists $conf{'Keep duplicates'} && $conf{'Keep duplicates'} eq 'Yes') {
+    print "<tr bgcolor=\"$color[0]\"><td><b>PCR duplicates</b></td>",
+            "<td><b>", digitalize($duplicate), 
+            ($aligned != 0 ? sprintf(" (%.2f %%)", $duplicate/$aligned*100) : " (N/A)"), 
+            "</b></td></tr>\n";
 }
+
 print "<tr bgcolor=\"$color[1]\"><td><b>Reported alignments</b></td>",
-		"<td><b>", digitalize($reported), sprintf(" (%.2f %%)", $reported/$aligned*100), "</b></td></tr>\n",
-	 "</table>\n\n";
+        "<td><b>", digitalize($reported), 
+        ($aligned != 0 ? sprintf(" (%.2f %%)", $reported/$aligned*100) : " (N/A)"), 
+        "</b></td></tr>\n",
+        "</table>\n\n";
 
 ############################################
 unless( $alignonly ) {
@@ -185,15 +226,27 @@ while( <LOG> ) {
 		}
 	}
 }
+# my ($wm, $cm, $tm);
+# if( $TAPS ) {
+# 	$wm = sprintf("%.2f", $wT/($wC+$wT)*100);
+# 	$cm = sprintf("%.2f", $cT/($cC+$cT)*100);
+# 	$tm = sprintf("%.2f", ($wT+$cT)/($wC+$wT+$cC+$cT)*100);
+# } else {
+# 	$wm = sprintf("%.2f", $wC/($wC+$wT)*100);
+# 	$cm = sprintf("%.2f", $cC/($cC+$cT)*100);
+# 	$tm = sprintf("%.2f", ($wC+$cC)/($wC+$wT+$cC+$cT)*100);
+# }
+
 my ($wm, $cm, $tm);
-if( $TAPS ) {
-	$wm = sprintf("%.2f", $wT/($wC+$wT)*100);
-	$cm = sprintf("%.2f", $cT/($cC+$cT)*100);
-	$tm = sprintf("%.2f", ($wT+$cT)/($wC+$wT+$cC+$cT)*100);
+
+if ($TAPS) {
+    $wm = ($wC + $wT != 0) ? sprintf("%.2f", $wT / ($wC + $wT) * 100) : "N/A";
+    $cm = ($cC + $cT != 0) ? sprintf("%.2f", $cT / ($cC + $cT) * 100) : "N/A";
+    $tm = ($wC + $wT + $cC + $cT != 0) ? sprintf("%.2f", ($wT + $cT) / ($wC + $wT + $cC + $cT) * 100) : "N/A";
 } else {
-	$wm = sprintf("%.2f", $wC/($wC+$wT)*100);
-	$cm = sprintf("%.2f", $cC/($cC+$cT)*100);
-	$tm = sprintf("%.2f", ($wC+$cC)/($wC+$wT+$cC+$cT)*100);
+    $wm = ($wC + $wT != 0) ? sprintf("%.2f", $wC / ($wC + $wT) * 100) : "N/A";
+    $cm = ($cC + $cT != 0) ? sprintf("%.2f", $cC / ($cC + $cT) * 100) : "N/A";
+    $tm = ($wC + $wT + $cC + $cT != 0) ? sprintf("%.2f", ($wC + $cC) / ($wC + $wT + $cC + $cT) * 100) : "N/A";
 }
 
 print "<table id=\"methStat\" width=\"75%\">\n",
